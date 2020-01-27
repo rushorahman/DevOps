@@ -1,3 +1,3 @@
 # Jenkins-Installation
 
-Steps on building z Jenkins EC2 Server
+Steps on building a Jenkins EC2 Server
