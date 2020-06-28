@@ -1,6 +1,6 @@
+STEPS ON CREATING CI/CD PIPELINE
+
 Jenkins Installation
-
-
 Step 1. Select EC2 server and initial set up
  
 	- Navigate to EC2 Console
@@ -25,14 +25,14 @@ Step 2. Log into ec2 server, Installing Java
 Step 3. Set home path of Java
 
 	To find where jre exist, use command "find /usr/lib/jvm/java-1.8* | head -n 3"
-            -  It shows an actual path of jre: (Example -" usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-1.el8_0.x86_64 ")
-            -  To set the home path under home directory, use command cd~ to go to home directory
-            -   Next type vi .bash_profile, under user specific environment and startup programs, save the lines below by pressine Press I (for insert) : 
+        -  It shows an actual path of jre: (Example -" usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-1.el8_0.x86_64 ")
+        -  To set the home path under home directory, use command cd~ to go to home directory
+        -  Next type vi .bash_profile, under user specific environment and startup programs, save the lines below by pressine Press I (for insert) : 
           
 	  (Example) JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-1.el8_0.x86_64export JAVA_HOME
                     PATH=$PATH:$HOME/bin:$JAVA_HOME
          
-            - Then Press ESC + :wq to save and exit
+            - Then Press ESC + :wq to save and exit.
 	    - Type exit and logout to restart the session
 	    - type sudo su -
 	    - echo $JAVA_HOME
@@ -53,13 +53,46 @@ Step 5 : Accessing Jenkins
    By default jenkins runs at port `8080`, You can access jenkins at http://YOUR-SERVER-PUBLIC-IP:8080
 
 Step 6 : Configure Jenkins
-         - The default Username is `admin`
-         - Grab the default password 
-         - Password Location: `sudo cat /var/lib/jenkins/secrets/initialAdminPassword'
-         - `Skip` Plugin Installation; _We can do it later_
-         - Change admin password
-         - `Admin` > `Configure` > `Password`
-         - Configure `java` path
-         - `Manage Jenkins` > `Global Tool Configuration` > `JDK` 
-	 -  To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
-	 -  Copy and PAste this Java path in JAVA_HOME and name JAVA_HOME
+        - The default Username is `admin`
+        - Grab the default password 
+        - Password Location: `sudo cat /var/lib/jenkins/secrets/initialAdminPassword'
+        - `Skip` Plugin Installation; _We can do it later_
+        - Change admin password
+        - `Admin` > `Configure` > `Password`
+        - Configure `java` path
+        - `Manage Jenkins` > `Global Tool Configuration` > `JDK` 
+	-  To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
+	-  Copy and PAste this Java path in JAVA_HOME and name JAVA_HOME
+	 
+	 
+	 
+	 Git Installation
+	  
+	 - In Jenkins server, type sudo install git -y
+	 - Go to Jenkins - Manage jenkins - Manage plugin -search git -install
+	 - Go to Global tool Configuration - git - name Git hub - save it.
+	 
+	 Maven Installation
+	 
+	 - Go to https://maven.apache.org/download.cgi - Copy the link address for tar.gz by clicking right button in the mouse.
+	 - Go back to the server - type cd /opt - wget (link : http://apache.mirrors.hoobly.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz)
+	 - To untar, type tar -xvzf apache-maven-3.6.3-bin.tar.gz 
+	 - move the file to maven, type mv apache-maven-3.6.3-bin.tar.gz maven - Go to maven : cd maven/
+	 - to set the path under maven type : vi ~/.bash_profile, Press I
+	 	- under JAVA_HOME type, 
+	              M2_HOME=/opt/maven
+		      M2=/opt/maven/bin
+    (Update the PATH) PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2:$M2_HOME
+
+        - Press ESC, type :wq, press enter to save and exit
+	- Type 'exit' to log out
+	- Type 'mvn --version' (will show the version)
+	- Go to jenkins server - manage jenkins - manage plugins - search 'maven'- install maven integration 
+	- Go back to manage jenkins - Global tool config - set the path for maven
+	- under name type, M2_HOME - under MAVEN_HOME type /opt/maven
+	
+	Next
+	
+	To host, build Tomcat server
+
+		    
