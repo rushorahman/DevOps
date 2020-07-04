@@ -29,8 +29,8 @@ Step 3. Set home path of Java
         -  To set the home path under home directory, use command cd~ to go to home directory
         -  Next type vi .bash_profile, under user specific environment and startup programs, save the lines below by pressine Press I (for insert) : 
           
-	  (Example) JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-1.el8_0.x86_64export JAVA_HOME
-                    PATH=$PATH:$HOME/bin:$JAVA_HOME
+	  (Example) JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64
+		PATH=$PATH:$JAVA_HOME
          
             - Then Press ESC + :wq to save and exit.
 	    - Type exit and logout to restart the session
