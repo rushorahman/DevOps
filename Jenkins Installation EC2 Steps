@@ -1,7 +1,7 @@
 STEPS ON CREATING CI/CD PIPELINE
 
 Jenkins Installation
-Step 1. Select EC2 server and initial set up
+	Step 1. Select EC2 server and initial set up
  
 	- Navigate to EC2 Console
    	- Click on Lunch instance 
@@ -13,7 +13,7 @@ Step 1. Select EC2 server and initial set up
    	- Choose keypair or create new to have access in EC2
    	- Click Lunch instances
 
-Step 2. Log into ec2 server, Installing Java 
+	Step 2. Log into ec2 server, Installing Java 
 
 	- Use putty or Mobaxterm to log into your Jenkins EC2 server using downloaded keypair (.PPK/.PEM file)
 	- After get connected, type "sudo su -" in the terminal to become a root user to get permission for installation.
@@ -22,7 +22,7 @@ Step 2. Log into ec2 server, Installing Java
 	- Check the Java version again using "java -version" to make sure Java is no longer in the system
 	- Install Java 1.8, use command "yum install java-1.8*"
 	
-Step 3. Set home path of Java
+	Step 3. Set home path of Java
 
 	To find where jre exist, use command "find /usr/lib/jvm/java-1.8* | head -n 3"
         -  It shows an actual path of jre: (Example -" usr/lib/jvm/java-1.8.0-openjdk-1.8.0.212.b04-1.el8_0.x86_64 ")
@@ -37,7 +37,7 @@ Step 3. Set home path of Java
 	    - type sudo su -
 	    - echo $JAVA_HOME
 
-Step 4. Install Jenkins
+	Step 4. Install Jenkins
 
         To install Jenkins, type the following command
         -  yum -y install wget
@@ -49,11 +49,13 @@ Step 4. Install Jenkins
 
         (Get the latest version of jenkins from https://pkg.jenkins.io/redhat-stable/)
 
-Step 5 : Accessing Jenkins
-   By default jenkins runs at port `8080`, You can access jenkins at http://YOUR-SERVER-PUBLIC-IP:8080
+	Step 5 : Accessing Jenkins
+   	
+	By default jenkins runs at port `8080`, You can access jenkins at http://YOUR-SERVER-PUBLIC-IP:8080
 
-Step 6 : Configure Jenkins
-        - The default Username is `admin`
+	Step 6 : Configure Jenkins
+        
+	- The default Username is `admin`
         - Grab the default password 
         - Password Location: `sudo cat /var/lib/jenkins/secrets/initialAdminPassword'
         - `Skip` Plugin Installation; _We can do it later_
@@ -63,23 +65,23 @@ Step 6 : Configure Jenkins
         - `Manage Jenkins` > `Global Tool Configuration` > `JDK` 
 	-  To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
 	-  Copy and PAste this Java path in JAVA_HOME and name JAVA_HOME
+	  
 	 
-	 
-	 
-	 Git Installation
+Git Installation
 	  
 	 - In Jenkins server, type sudo install git -y
 	 - Go to Jenkins - Manage jenkins - Manage plugin -search git -install
 	 - Go to Global tool Configuration - git - name Git hub - save it.
 	 
-	 Maven Installation
+Maven Installation
 	 
 	 - Go to https://maven.apache.org/download.cgi - Copy the link address for tar.gz by clicking right button in the mouse.
 	 - Go back to the server - type cd /opt - wget (link : http://apache.mirrors.hoobly.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz)
 	 - To untar, type tar -xvzf apache-maven-3.6.3-bin.tar.gz 
 	 - move the file to maven, type mv apache-maven-3.6.3-bin.tar.gz maven - Go to maven : cd maven/
 	 - to set the path under maven type : vi ~/.bash_profile, Press I
-	 	- under JAVA_HOME type, 
+	 	
+		- under JAVA_HOME type, 
 	              M2_HOME=/opt/maven
 		      M2=/opt/maven/bin
     (Update the PATH) PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2:$M2_HOME
@@ -91,8 +93,70 @@ Step 6 : Configure Jenkins
 	- Go back to manage jenkins - Global tool config - set the path for maven
 	- under name type, M2_HOME - under MAVEN_HOME type /opt/maven
 	
-	Next
+Tomcat server
 	
-	To host, build Tomcat server
+	Installing Apache Tomcat 
+		
+		sudo su -
+		hostname tomcat (To change the hostname
+		sudo su -
+		cd /opt (To move to /opt and install tomcat)
+		wget http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.56/bin/apache-tomcat-8.5.56.tar.gz
+		ls
+		tar -xvzv apache-tomcat-8.5.56.tar.gz (To untar the zip file)
+		mv apache-tomcat-8.5.56 tomcat 
+		cd tomcat
+		ls
+		cd bin (To move to bin)
+		yum install java-1.8* (required to run the tomcat server)
+		./startup.sh (To start the tomcat server) (./shutdown.sh to shutdown the server)
+		Check in your browser <yourserverip:8080>
+		
+		- To allow accesing from anywhere, find context.xml < find / -name context.xml >
+		edit -  /opt/tomcat/webapps/host-manager/META-INF/context.xml and /
+			/opt/tomcat/webapps/manager/META-INF/context.xml (using vi command)
+		modify velve class name for both location by modifying using <!-- & close it using --> (to allow access from anywhere)
+		esc :wq to save it
+		type ./shutdown.sh then ./startup.sh to restart the service
+		
+		To add some roles
+		to go conf directory, type 
+		cd ..
+		cd conf/
+		vi tomcat-users.xml (To edit the .xml file)
+		Paste the following roles over </tomcat-user>
+		
+			<role rolename="manager-gui"/>
+	                <role rolename="manager-script"/>
+	                <role rolename="manager-jmx"/>
+	 		<role rolename="manager-status"/>
+	 		<user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+	 		<user username="deployer" password="deployer" roles="manager-script"/>
+	 		<user username="tomcat" password="s3cret" roles="manager-gui"/>
+			
+		esc + :wq to save it 
+		go to /bin directory and restart the server 
+ 		
+	Optional
+	
+	Using unique ports for each application is a best practice in an environment. But tomcat and Jenkins runs on ports number 8080. Hence lets change tomcat port number to 8090. Change port number in conf/server.xml file under tomcat home
+	cd /opt/apache-tomcat-8.5.35/conf
+	# update port number in the "connecter port" field in server.xml
+	# restart tomcat after configuration update
+	tomcatdown
+	tomcatup
+	Check point :
+	Access tomcat application from browser on port 8090
+
+	http://<Public_IP>:8090
+	now application is accessible on port 8090. but tomcat application doesnt allow to login from browser. changing a default parameter in context.xml does address this issue
+	#search for context.xml
+	find / -name context.xml
+	above command gives 3 context.xml files. comment () Value ClassName field on files which are under webapp directory. After that restart tomcat services to effect these changes
+	tomcatdown
+	tomcatup
+	
+	
+Restart serivce and try to login to tomcat application from the browser. This time it should be Successful
 
 		    
