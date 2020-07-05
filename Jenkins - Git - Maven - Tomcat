@@ -1,6 +1,7 @@
 STEPS ON CREATING CI/CD PIPELINE
 
-Jenkins Installation
+Jenkins Installation (Jenkins-Git-Maven in 1st Ec2 instance with security port for SSH, HTTP and Custom port 8080 open)
+
 	Step 1. Select EC2 server and initial set up
  
 	- Navigate to EC2 Console
@@ -15,7 +16,7 @@ Jenkins Installation
 
 	Step 2. Log into ec2 server, Installing Java 
 
-	- Use putty or Mobaxterm to log into your Jenkins EC2 server using downloaded keypair (.PPK/.PEM file)
+	- Use putty(.PPK) or Mobaxterm(.PEM) to log into your Jenkins EC2 server using downloaded keypair.
 	- After get connected, type "sudo su -" in the terminal to become a root user to get permission for installation.
 	- First check the Java version installed by typing "java -version" 
 	- If the Java version is 1.7, remove by typing "yum remove java-1.7.0*
@@ -40,14 +41,14 @@ Jenkins Installation
 	Step 4. Install Jenkins
 
         To install Jenkins, type the following command
-        -  yum -y install wget
+        - yum -y install wget
         - sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
         - sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
         - yum -y install jenkins
         - service jenkins start (To start the service)
         - chkconfig jenkins on (To check status of the service)
 
-        (Get the latest version of jenkins from https://pkg.jenkins.io/redhat-stable/)
+(Get the latest version of jenkins from https://pkg.jenkins.io/redhat-stable/)
 
 	Step 5 : Accessing Jenkins
    	
@@ -58,13 +59,13 @@ Jenkins Installation
 	- The default Username is `admin`
         - Grab the default password 
         - Password Location: `sudo cat /var/lib/jenkins/secrets/initialAdminPassword'
-        - `Skip` Plugin Installation; _We can do it later_
+        - Skip Plugin Installation; _We can do it later_
         - Change admin password
-        - `Admin` > `Configure` > `Password`
-        - Configure `java` path
-        - `Manage Jenkins` > `Global Tool Configuration` > `JDK` 
-	-  To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
-	-  Copy and PAste this Java path in JAVA_HOME and name JAVA_HOME
+        - Admin> Configure> Password
+        - Configure java path
+        - Manage Jenkins > Global Tool Configuration > JDK 
+	- To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
+	- Copy and Paste this Java path in JAVA_HOME and name JAVA_HOME
 	  
 	 
 Git Installation
@@ -78,49 +79,49 @@ Maven Installation
 	 - Go to https://maven.apache.org/download.cgi - Copy the link address for tar.gz by clicking right button in the mouse.
 	 - Go back to the server - type cd /opt - wget (link : http://apache.mirrors.hoobly.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz)
 	 - To untar, type tar -xvzf apache-maven-3.6.3-bin.tar.gz 
-	 - move the file to maven, type mv apache-maven-3.6.3-bin.tar.gz maven - Go to maven : cd maven/
-	 - to set the path under maven type : vi ~/.bash_profile, Press I
+	 - Move the file to maven, type mv apache-maven-3.6.3-bin.tar.gz maven - Go to maven : cd maven/
+	 - To set the path under maven type : vi ~/.bash_profile, Press I
 	 	
-		- under JAVA_HOME type, 
+		- Under JAVA_HOME type, 
 	              M2_HOME=/opt/maven
 		      M2=/opt/maven/bin
-    (Update the PATH) PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2:$M2_HOME
+    		      PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2:$M2_HOME (Update the PATH)
 
         - Press ESC, type :wq, press enter to save and exit
 	- Type 'exit' to log out
 	- Type 'mvn --version' (will show the version)
 	- Go to jenkins server - manage jenkins - manage plugins - search 'maven'- install maven integration 
 	- Go back to manage jenkins - Global tool config - set the path for maven
-	- under name type, M2_HOME - under MAVEN_HOME type /opt/maven
+	- Under name type, M2_HOME - under MAVEN_HOME type /opt/maven
 	
-Tomcat server
+Tomcat server (Create a 2nd Ec2 instance with SSH, HTTP and custom port 8080/8090 open)
 	
-	Installing Apache Tomcat 
+	- Installing Apache Tomcat 
 		
 		sudo su -
-		hostname tomcat (To change the hostname
+		hostname tomcat (To change the hostname) 
 		sudo su -
 		cd /opt (To move to /opt and install tomcat)
 		wget http://mirror.metrocast.net/apache/tomcat/tomcat-8/v8.5.56/bin/apache-tomcat-8.5.56.tar.gz
 		ls
-		tar -xvzv apache-tomcat-8.5.56.tar.gz (To untar the zip file)
-		mv apache-tomcat-8.5.56 tomcat 
+		tar -xvzv apache-tomcat-8.5.56.tar.gz (To untar/extract the zip file)
+		mv apache-tomcat-8.5.56 tomcat (For better naming)
 		cd tomcat
 		ls
 		cd bin (To move to bin)
-		yum install java-1.8* (required to run the tomcat server)
+		yum install java-1.8* (Java required to start the tomcat server)
 		./startup.sh (To start the tomcat server) (./shutdown.sh to shutdown the server)
-		Check in your browser <yourserverip:8080>
 		
-		- To allow accesing from anywhere, find context.xml < find / -name context.xml >
-		edit -  /opt/tomcat/webapps/host-manager/META-INF/context.xml and /
-			/opt/tomcat/webapps/manager/META-INF/context.xml (using vi command)
-		modify velve class name for both location by modifying using <!-- & close it using --> (to allow access from anywhere)
+	- To allow accesing from anywhere, 
+		find context.xml < find / -name context.xml >
+		edit -  vi /opt/tomcat/webapps/host-manager/META-INF/context.xml and /
+			vi /opt/tomcat/webapps/manager/META-INF/context.xml (using vi command)
+		
+		modify velve class name for both location by disabling/comment-out using <!-- & close it using --> (to allow access from anywhere)
 		esc :wq to save it
 		type ./shutdown.sh then ./startup.sh to restart the service
 		
-		To add some roles
-		to go conf directory, type 
+	- To add some roles to in conf directory, type command :
 		cd ..
 		cd conf/
 		vi tomcat-users.xml (To edit the .xml file)
@@ -137,16 +138,16 @@ Tomcat server
 		Esc + :wq to save it 
 		go to /bin directory and restart the server 
  		
-	Optional
+	Optional : To change the port number to 8090 (Best Practice)
 	
-	Using unique ports for each application is a best practice in an environment. But tomcat and Jenkins runs on ports number 8080. Hence lets change tomcat port number to 8090. Change port number in conf/server.xml file under tomcat home
-	cd /opt/apache-tomcat-8.5.35/conf
-	# update port number in the "connecter port" field in server.xml
-	# restart tomcat after configuration update
-	tomcatdown
-	tomcatup
-	Check point :
-	Access tomcat application from browser on port 8090
+		Using unique ports for each application is a best practice in an environment. But tomcat and Jenkins runs on ports number 8080. Hence lets change tomcat port number to 8090. Change port number in conf/server.xml file under tomcat home
+		cd /opt/apache-tomcat-8.5.35/conf
+		# update port number in the "connecter port" field in server.xml
+		# restart tomcat after configuration update
+		tomcatdown
+		tomcatup
+		Check point :
+		Access tomcat application from browser on port 8090
 
 	http://<Public_IP>:8090
 	now application is accessible on port 8090. but tomcat application doesnt allow to login from browser. changing a default parameter in context.xml does address this issue
