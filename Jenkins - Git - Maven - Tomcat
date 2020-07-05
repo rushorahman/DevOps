@@ -134,7 +134,7 @@ Tomcat server
 	 		<user username="deployer" password="deployer" roles="manager-script"/>
 	 		<user username="tomcat" password="s3cret" roles="manager-gui"/>
 			
-		esc + :wq to save it 
+		Esc + :wq to save it 
 		go to /bin directory and restart the server 
  		
 	Optional
