@@ -1,3 +1,1 @@
-# Jenkins-Installation
-
-Steps on installing Jenkins in EC2 Server
+Steps on installing Jenkins-Git-Maven-Tomcat in EC2 Servers
