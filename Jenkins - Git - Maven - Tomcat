@@ -65,21 +65,23 @@ Jenkins Installation (Jenkins-Git-Maven in 1st Ec2 instance with security port f
         - Configure java path
         - Manage Jenkins > Global Tool Configuration > JDK 
 	- To find the Java path, type : echo $JAVA_HOME (Example : /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64) 
-	- Copy and Paste this Java path in JAVA_HOME and name JAVA_HOME
+	- Copy and Paste this Java path in JAVA_HOME and name it as JAVA_HOME
 	  
 	 
 Git Installation
 	  
-	 - In Jenkins server, type sudo install git -y
+	 - In Jenkins server, type sudo yum install git -y
 	 - Go to Jenkins - Manage jenkins - Manage plugin -search git -install
 	 - Go to Global tool Configuration - git - name Git hub - save it.
 	 
 Maven Installation
 	 
 	 - Go to https://maven.apache.org/download.cgi - Copy the link address for tar.gz by clicking right button in the mouse.
-	 - Go back to the server - type cd /opt - wget (link : http://apache.mirrors.hoobly.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz)
+	 - Go back to the server - type cd /opt 
+	 - to download type- wget http://apache.mirrors.hoobly.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 	 - To untar, type tar -xvzf apache-maven-3.6.3-bin.tar.gz 
-	 - Move the file to maven, type mv apache-maven-3.6.3-bin.tar.gz maven - Go to maven : cd maven/
+	 - Move the file to maven, type mv apache-maven-3.6.3 maven 
+	 - Go to maven : cd maven/
 	 - To set the path under maven type : vi ~/.bash_profile, Press I
 	 	
 		- Under JAVA_HOME type, 
