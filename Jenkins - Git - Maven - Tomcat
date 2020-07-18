@@ -112,11 +112,11 @@ Tomcat server (Create a 2nd Ec2 instance with SSH, HTTP and custom port 8080/809
 		ls
 		cd bin (To move to bin)
 		yum install java-1.8* (Java required to start the tomcat server)
-		./startup.sh (To start the tomcat server) (./shutdown.sh to shutdown the server)
+		Go to tomcat/bin folder, type: ./startup.sh (To start the tomcat server) (./shutdown.sh to shutdown the server)
 		
 	- To allow accesing from anywhere, 
 		find context.xml < find / -name context.xml >
-		edit -  vi /opt/tomcat/webapps/host-manager/META-INF/context.xml and /
+		edit -  vi /opt/tomcat/webapps/host-manager/META-INF/context.xml and/
 			vi /opt/tomcat/webapps/manager/META-INF/context.xml (using vi command)
 		
 		modify velve class name for both location by disabling/comment-out using <!-- & close it using --> (to allow access from anywhere)
