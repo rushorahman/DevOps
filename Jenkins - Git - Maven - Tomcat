@@ -46,7 +46,7 @@ Jenkins Installation (Jenkins-Git-Maven in 1st Ec2 instance with security port f
         - sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
         - yum -y install jenkins
         - service jenkins start (To start the service)
-        - chkconfig jenkins on (To check status of the service)
+        - service jenkins status (To check status of the service)
 
 (Get the latest version of jenkins from https://pkg.jenkins.io/redhat-stable/)
 
