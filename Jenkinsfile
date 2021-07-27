@@ -51,8 +51,9 @@ pipeline
 				script
 				{
 					echo "Deployment"
-					sh 'sudo cp /var/lib/jenkins/workspace/addressbookpackage/target/addressbook.war /usr/share/tomcat/webapps
-                                        
+					sh 'sudo cp /var/lib/jenkins/workspace/addressbookpackage/target/addressbook.war /usr/share/tomcat/webapps'
+					sh 'sudo rm -rf /usr/share/tomcat/webapps/addressbook'
+					sh 'sudo systemctl restart tomcat'
 				}
 			}
 		}
