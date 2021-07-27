@@ -11,7 +11,29 @@ pipeline
 			}
 		}
 		
-		stage('Build')
+		stage('Compile')
+		{
+			steps
+			{
+				dir('')
+				{
+					sh '/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/MVN_HOME/bin/mvn compile'
+				}
+			}
+		}
+		
+		stage('Test')
+		{
+			steps
+			{
+				dir('')
+				{
+					sh '/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/MVN_HOME/bin/mvn test'
+				}
+			}
+		}
+		
+	 	stage('Build')
 		{
 			steps
 			{
