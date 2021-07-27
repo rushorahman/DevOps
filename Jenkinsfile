@@ -17,7 +17,7 @@ pipeline
 			{
 				dir('')
 				{
-					sh '/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/myMaven/bin/mvn package'
+					sh '/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/MVN_HOME/bin/mvn package'
 				}
 			}
 		}
